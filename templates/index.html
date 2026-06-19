@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Object Hunt — 2 Player Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ─────────────────────────────────── -->
+  <header id="game-header">
+    <div id="p1-hud" class="player-hud p1">
+      <span class="hud-label">PLAYER 1</span>
+      <span class="hud-score" id="p1-score">0</span>
+    </div>
+
+    <div id="center-hud">
+      <div id="round-info">Round 1 / 5</div>
+      <div id="target-wrap">
+        <span class="find-label">CARI</span>
+        <span id="target-name">—</span>
+      </div>
+      <div id="timer-wrap">
+        <svg id="timer-ring" viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="19" class="ring-bg"/>
+          <circle cx="22" cy="22" r="19" class="ring-fg" id="ring-fg"/>
+        </svg>
+        <span id="timer-value">30</span>
+      </div>
+    </div>
+
+    <div id="p2-hud" class="player-hud p2">
+      <span class="hud-label">PLAYER 2</span>
+      <span class="hud-score" id="p2-score">0</span>
+      <button id="btn-switch-cam" class="btn-cam-switch" title="Ganti Kamera">📷</button>
+    </div>
+  </header>
+
+  <!-- ── GAME AREA ────────────────────────────────── -->
+  <main id="game-area">
+    <video id="game-video" autoplay playsinline muted></video>
+    <canvas id="game-canvas"></canvas>
+
+    <!-- P1 found flash -->
+    <div id="p1-flash" class="found-flash p1-flash">✓ FOUND! +1</div>
+    <!-- P2 found flash -->
+    <div id="p2-flash" class="found-flash p2-flash">✓ FOUND! +1</div>
+
+    <!-- Divider -->
+    <div id="divider"></div>
+
+    <!-- API indicator dots -->
+    <div id="p1-dot" class="api-dot p1-dot"></div>
+    <div id="p2-dot" class="api-dot p2-dot"></div>
+  </main>
+
+  <!-- ── SCREEN: CAMERA SETUP ──────────────────────── -->
+  <div id="screen-camera" class="overlay active">
+    <div class="overlay-card">
+      <div class="cam-icon">📷</div>
+      <h2 class="cam-title">Persiapan Kamera</h2>
+      <p class="cam-desc">Izinkan akses kamera untuk memulai game</p>
+
+      <!-- Step 1: Allow button -->
+      <div id="cam-step-allow">
+        <button id="btn-allow-cam" class="btn-primary">🎥 Izinkan Akses Kamera</button>
+        <p id="cam-error" class="cam-error"></p>
+      </div>
+
+      <!-- Step 2: Select camera (shown after permission granted) -->
+      <div id="cam-step-select" style="display:none">
+        <p class="cam-select-label">Pilih Kamera:</p>
+        <select id="cam-select" class="cam-dropdown"></select>
+        <div id="cam-preview-wrap">
+          <video id="cam-preview" autoplay muted playsinline></video>
+          <div class="cam-preview-label">Preview</div>
+        </div>
+        <button id="btn-confirm-cam" class="btn-primary">✅ Gunakan Kamera Ini</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: WAITING ───────────────────────────── -->
+  <div id="screen-waiting" class="overlay">
+    <div class="overlay-card">
+      <div class="game-logo">🎯</div>
+      <h1 class="game-title">OBJECT HUNT</h1>
+      <p class="game-subtitle">2 Player Edition</p>
+      <div class="player-badges">
+        <div class="badge p1-badge">← PLAYER 1<br/><small>Sisi Kiri</small></div>
+        <div class="badge p2-badge">PLAYER 2 →<br/><small>Sisi Kanan</small></div>
+      </div>
+      <div class="config-info">
+        <span>5 Ronde</span><span class="dot-sep">•</span>
+        <span>30 Detik / Ronde</span><span class="dot-sep">•</span>
+        <span>15 Objek</span>
+      </div>
+      <button id="btn-start" class="btn-primary">MULAI GAME</button>
+      <button id="btn-change-cam" class="btn-secondary">📷 Ganti Kamera</button>
+      <p class="hint-text">Pastikan kamera sudah aktif</p>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: COUNTDOWN ─────────────────────────── -->
+  <div id="screen-countdown" class="overlay">
+    <div class="overlay-card slim">
+      <p class="cd-label">Siapkan diri!</p>
+      <p class="cd-find">Cari objek ini:</p>
+      <p id="cd-target" class="cd-target-name"></p>
+      <div id="cd-number" class="cd-number">3</div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: ROUND END ─────────────────────────── -->
+  <div id="screen-round-end" class="overlay">
+    <div class="overlay-card slim">
+      <p class="re-round" id="re-round-label">Round 1 Selesai</p>
+      <p class="re-message" id="re-message">PLAYER 1 MENANG!</p>
+      <p class="re-obj">Objek: <strong id="re-object"></strong></p>
+      <div class="re-scores" id="re-scores-wrap">
+        <div class="re-score p1"><span>P1</span><strong id="re-p1">0</strong></div>
+        <div class="re-vs">vs</div>
+        <div class="re-score p2"><span>P2</span><strong id="re-p2">0</strong></div>
+      </div>
+      <p class="re-next" id="re-next">Ronde berikutnya dalam 3...</p>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: GAME OVER ─────────────────────────── -->
+  <div id="screen-game-over" class="overlay">
+    <div class="overlay-card">
+      <div class="go-trophy">🏆</div>
+      <h2 class="go-title">GAME OVER</h2>
+      <p class="go-winner" id="go-winner">PLAYER 1 JUARA!</p>
+      <div class="go-scores">
+        <div class="go-score p1">
+          <span>PLAYER 1</span>
+          <strong id="go-p1">0</strong>
+        </div>
+        <div class="go-score p2">
+          <span>PLAYER 2</span>
+          <strong id="go-p2">0</strong>
+        </div>
+      </div>
+      <div class="go-buttons">
+        <button id="btn-replay" class="btn-primary">MAIN LAGI</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/game.js"></script>
+</body>
+</html>
