@@ -22,7 +22,18 @@ def detect():
         files = {"file": (f.filename or "frame.jpg", f.read(), f.content_type or "image/jpeg")}
         response = req_lib.post(API_URL, headers=API_HEADERS, files=files, timeout=6)
         if response.status_code == 200:
-            return jsonify(response.json())
+            result = response.json()
+            # DEBUG: print raw response structure
+            import json
+            print("[DEBUG] Raw API response:", json.dumps(result, indent=2)[:1000])
+            # Filter out 'person' detections
+            if isinstance(result.get('data'), list):
+                result['data'] = [
+                    {k: v for k, v in item.items() if k.lower() != 'person'}
+                    for item in result['data']
+                ]
+            print("[DEBUG] After filter:", json.dumps(result.get('data'), indent=2)[:500])
+            return jsonify(result)
         return jsonify({"error": f"API {response.status_code}"}), 502
     except Exception as e:
         return jsonify({"error": str(e)}), 500

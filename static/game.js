@@ -398,6 +398,7 @@ async function sendFrame(player) {
 function checkTarget(results) {
   for (const item of results) {
     for (const [name, data] of Object.entries(item)) {
+      if (name.toLowerCase() === 'person') continue; // skip person detections
       if (name.toLowerCase() === S.target.toLowerCase() &&
           data.conf_score >= CFG.confThreshold) return true;
     }
@@ -412,6 +413,7 @@ function drawBBoxes(results, xOff, sw, sh, vw, vh, color, targetColor) {
 
   for (const item of results) {
     for (const [name, data] of Object.entries(item)) {
+      if (name.toLowerCase() === 'person') continue; // skip person detections
       const bbox = data.bbox;
       const conf = data.conf_score;
       if (!bbox || bbox.length < 2) continue;
