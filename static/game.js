@@ -368,7 +368,8 @@ async function captureHalf(player) {
 
   const oc  = new OffscreenCanvas(Math.floor(vw / 2), vh);
   const oct = oc.getContext('2d');
-  const sx  = player === 1 ? 0 : Math.floor(vw / 2);
+  // After horizontal flip on canvas, left screen = right half of raw video
+  const sx  = player === 1 ? Math.floor(vw / 2) : 0;
   oct.drawImage(video, sx, 0, Math.floor(vw / 2), vh, 0, 0, oc.width, vh);
   return oc.convertToBlob({ type: 'image/jpeg', quality: 0.72 });
 }
@@ -456,9 +457,13 @@ function renderLoop() {
   const H       = canvas.height;
   const halfW   = W / 2;
 
-  // ── Draw video frame ──
+  // ── Draw video frame (non-mirrored / flipped) ──
   if (video.readyState >= 2 && video.videoWidth > 0) {
+    ctx.save();
+    ctx.translate(W, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, W, H);
+    ctx.restore();
   } else {
     ctx.fillStyle = '#08090f';
     ctx.fillRect(0, 0, W, H);
