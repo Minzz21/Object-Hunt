@@ -292,10 +292,10 @@ html, body {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 24px;
-  padding: 48px 56px;
+  padding: 40px 48px;
   text-align: center;
-  max-width: 520px;
-  width: 90%;
+  max-width: 580px;
+  width: 92%;
   box-shadow: 0 32px 80px rgba(0,0,0,0.6);
 }
 .overlay-card.slim { padding: 36px 48px; }
@@ -318,7 +318,152 @@ html, body {
   letter-spacing: 3px;
   color: var(--text-dim);
   text-transform: uppercase;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+}
+
+/* ── Setup: Player Names ──────────────────────────────── */
+.setup-names {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.name-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.name-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: default;
+}
+.p1-label { color: var(--p1); }
+.p2-label { color: var(--p2); }
+
+.name-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.name-input::placeholder { color: var(--text-dim); font-weight: 400; }
+.p1-input:focus {
+  border-color: var(--p1);
+  background: rgba(255,123,53,0.07);
+  box-shadow: 0 0 0 3px rgba(255,123,53,0.12);
+}
+.p2-input:focus {
+  border-color: var(--p2);
+  background: rgba(0,212,255,0.07);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.12);
+}
+
+/* ── Setup: Game Settings ─────────────────────────────── */
+.setup-settings {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.setting-group:first-child { flex: 1; }
+.setting-group:last-child  { flex-shrink: 0; }
+
+.setting-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* Round pill buttons */
+.rounds-options {
+  display: flex;
+  gap: 8px;
+}
+
+.round-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-dim);
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, color 0.18s, transform 0.1s, box-shadow 0.18s;
+  letter-spacing: 0.5px;
+}
+.round-btn:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: var(--text);
+  background: rgba(255,255,255,0.08);
+}
+.round-btn.active {
+  border-color: var(--gold);
+  background: rgba(255,215,0,0.12);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(255,215,0,0.2);
+}
+.round-btn:active { transform: scale(0.93); }
+
+/* Time input */
+.time-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.time-input-wrap:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255,215,0,0.12);
+}
+.time-input {
+  width: 54px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  outline: none;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.time-input::-webkit-inner-spin-button,
+.time-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.time-unit {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .player-badges {

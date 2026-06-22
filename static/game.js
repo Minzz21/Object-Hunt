@@ -10,6 +10,9 @@ const CFG = {
   flashDuration: 2200,    // ms
 };
 
+// Player names (set from lobby inputs)
+let playerNames = { 1: 'PLAYER 1', 2: 'PLAYER 2' };
+
 const OBJECT_POOL = [
   'book', 'laptop', 'keyboard', 'mouse', 'scissors',
   'backpack', 'cell phone', 'chair', 'clock', 'bottle',
@@ -308,7 +311,7 @@ function endRound(winner) {
   elP1Score.textContent = S.p1Score;
   elP2Score.textContent = S.p2Score;
 
-  const msgs = { 0: '⏰ WAKTU HABIS!', 1: '🎉 PLAYER 1 MENANG!', 2: '🎉 PLAYER 2 MENANG!' };
+  const msgs = { 0: '⏰ WAKTU HABIS!', 1: `🎉 ${playerNames[1]} MENANG!`, 2: `🎉 ${playerNames[2]} MENANG!` };
   const cols = { 0: 'var(--text)', 1: 'var(--p1)', 2: 'var(--p2)' };
   document.getElementById('re-round-label').textContent = `Round ${S.round} Selesai`;
   const msgEl = document.getElementById('re-message');
@@ -317,6 +320,8 @@ function endRound(winner) {
   document.getElementById('re-object').textContent = S.target.toUpperCase();
   document.getElementById('re-p1').textContent = S.p1Score;
   document.getElementById('re-p2').textContent = S.p2Score;
+  document.getElementById('re-p1-name').textContent = playerNames[1];
+  document.getElementById('re-p2-name').textContent = playerNames[2];
 
   showScreen('roundEnd');
 
@@ -340,13 +345,15 @@ function endGame() {
   S.gameWinner = S.p1Score > S.p2Score ? 1 : S.p2Score > S.p1Score ? 2 : 0;
   S.phase = 'game_over';
 
-  const msgs = { 0: '🤝 SERI! SAMA KUAT!', 1: '🏆 PLAYER 1 JUARA!', 2: '🏆 PLAYER 2 JUARA!' };
+  const msgs = { 0: '🤝 SERI! SAMA KUAT!', 1: `🏆 ${playerNames[1]} JUARA!`, 2: `🏆 ${playerNames[2]} JUARA!` };
   const cols = { 0: 'var(--text)', 1: 'var(--p1)', 2: 'var(--p2)' };
   const winEl = document.getElementById('go-winner');
   winEl.textContent = msgs[S.gameWinner];
   winEl.style.color = cols[S.gameWinner];
   document.getElementById('go-p1').textContent = S.p1Score;
   document.getElementById('go-p2').textContent = S.p2Score;
+  document.getElementById('go-p1-name').textContent = playerNames[1];
+  document.getElementById('go-p2-name').textContent = playerNames[2];
   showScreen('gameOver');
 }
 
@@ -559,12 +566,47 @@ function renderLoop() {
 
 // ── Event Listeners ──────────────────────────────────────
 document.getElementById('btn-start').addEventListener('click', () => {
+  // Read player names
+  const n1 = document.getElementById('input-p1-name').value.trim();
+  const n2 = document.getElementById('input-p2-name').value.trim();
+  playerNames[1] = n1 || 'PLAYER 1';
+  playerNames[2] = n2 || 'PLAYER 2';
+
+  // Read round settings
+  const activeRoundBtn = document.querySelector('.round-btn.active');
+  CFG.totalRounds = activeRoundBtn ? parseInt(activeRoundBtn.dataset.val) : 5;
+  const timeVal = parseInt(document.getElementById('input-round-time').value);
+  CFG.roundTime = (isNaN(timeVal) || timeVal < 10) ? 10 : Math.min(timeVal, 300);
+
+  // Update HUD labels
+  document.getElementById('hud-p1-name').textContent = playerNames[1].toUpperCase();
+  document.getElementById('hud-p2-name').textContent = playerNames[2].toUpperCase();
+
   S.p1Score = 0; S.p2Score = 0;
   S.round   = 0; S.usedObjects = [];
   beginCountdown();
 });
 
 document.getElementById('btn-replay').addEventListener('click', resetGame);
+
+// ── Round selector & time input live update ───────────────
+function updateConfigDisplay() {
+  const activeBtn = document.querySelector('.round-btn.active');
+  const rounds = activeBtn ? activeBtn.dataset.val : CFG.totalRounds;
+  const timeVal = document.getElementById('input-round-time').value || CFG.roundTime;
+  document.getElementById('cfg-rounds-display').textContent = `${rounds} Ronde`;
+  document.getElementById('cfg-time-display').textContent = `${timeVal} Detik / Ronde`;
+}
+
+document.querySelectorAll('.round-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.round-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateConfigDisplay();
+  });
+});
+
+document.getElementById('input-round-time').addEventListener('input', updateConfigDisplay);
 
 document.addEventListener('keydown', e => {
   if (e.code === 'Space' && S.phase === 'waiting') {

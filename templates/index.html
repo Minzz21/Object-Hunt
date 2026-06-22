@@ -13,7 +13,7 @@
   <!-- ── HEADER ─────────────────────────────────── -->
   <header id="game-header">
     <div id="p1-hud" class="player-hud p1">
-      <span class="hud-label">PLAYER 1</span>
+      <span class="hud-label" id="hud-p1-name">PLAYER 1</span>
       <span class="hud-score" id="p1-score">0</span>
     </div>
 
@@ -33,7 +33,7 @@
     </div>
 
     <div id="p2-hud" class="player-hud p2">
-      <span class="hud-label">PLAYER 2</span>
+      <span class="hud-label" id="hud-p2-name">PLAYER 2</span>
       <span class="hud-score" id="p2-score">0</span>
       <button id="btn-switch-cam" class="btn-cam-switch" title="Ganti Kamera">📷</button>
     </div>
@@ -89,13 +89,42 @@
       <div class="game-logo">🎯</div>
       <h1 class="game-title">OBJECT HUNT</h1>
       <p class="game-subtitle">2 Player Edition</p>
-      <div class="player-badges">
-        <div class="badge p1-badge">← PLAYER 1<br/><small>Sisi Kiri</small></div>
-        <div class="badge p2-badge">PLAYER 2 →<br/><small>Sisi Kanan</small></div>
+      <!-- Player name inputs -->
+      <div class="setup-names">
+        <div class="name-field p1-field">
+          <label class="name-label p1-label" for="input-p1-name">← PLAYER 1</label>
+          <input id="input-p1-name" class="name-input p1-input" type="text" maxlength="16" placeholder="Nama Player 1" />
+        </div>
+        <div class="name-field p2-field">
+          <label class="name-label p2-label" for="input-p2-name">PLAYER 2 →</label>
+          <input id="input-p2-name" class="name-input p2-input" type="text" maxlength="16" placeholder="Nama Player 2" />
+        </div>
       </div>
-      <div class="config-info">
-        <span>5 Ronde</span><span class="dot-sep">•</span>
-        <span>30 Detik / Ronde</span><span class="dot-sep">•</span>
+
+      <!-- Game settings -->
+      <div class="setup-settings">
+        <div class="setting-group">
+          <label class="setting-label" for="select-rounds">🏆 Jumlah Ronde</label>
+          <div class="rounds-options" id="rounds-options">
+            <button class="round-btn" data-val="3">3</button>
+            <button class="round-btn active" data-val="5">5</button>
+            <button class="round-btn" data-val="7">7</button>
+            <button class="round-btn" data-val="9">9</button>
+            <button class="round-btn" data-val="11">11</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label class="setting-label" for="input-round-time">⏱ Waktu / Ronde</label>
+          <div class="time-input-wrap">
+            <input id="input-round-time" class="time-input" type="number" min="10" max="300" value="30" />
+            <span class="time-unit">detik</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-info" id="config-info-display">
+        <span id="cfg-rounds-display">5 Ronde</span><span class="dot-sep">•</span>
+        <span id="cfg-time-display">30 Detik / Ronde</span><span class="dot-sep">•</span>
         <span>15 Objek</span>
       </div>
       <button id="btn-start" class="btn-primary">MULAI GAME</button>
@@ -121,9 +150,9 @@
       <p class="re-message" id="re-message">PLAYER 1 MENANG!</p>
       <p class="re-obj">Objek: <strong id="re-object"></strong></p>
       <div class="re-scores" id="re-scores-wrap">
-        <div class="re-score p1"><span>P1</span><strong id="re-p1">0</strong></div>
+        <div class="re-score p1"><span id="re-p1-name">P1</span><strong id="re-p1">0</strong></div>
         <div class="re-vs">vs</div>
-        <div class="re-score p2"><span>P2</span><strong id="re-p2">0</strong></div>
+        <div class="re-score p2"><span id="re-p2-name">P2</span><strong id="re-p2">0</strong></div>
       </div>
       <p class="re-next" id="re-next">Ronde berikutnya dalam 3...</p>
     </div>
@@ -137,11 +166,11 @@
       <p class="go-winner" id="go-winner">PLAYER 1 JUARA!</p>
       <div class="go-scores">
         <div class="go-score p1">
-          <span>PLAYER 1</span>
+          <span id="go-p1-name">PLAYER 1</span>
           <strong id="go-p1">0</strong>
         </div>
         <div class="go-score p2">
-          <span>PLAYER 2</span>
+          <span id="go-p2-name">PLAYER 2</span>
           <strong id="go-p2">0</strong>
         </div>
       </div>
