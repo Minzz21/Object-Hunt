@@ -63,6 +63,11 @@ const elP2Dot     = document.getElementById('p2-dot');
 
 const RING_CIRC   = 2 * Math.PI * 19; // circumference of timer ring
 
+// ── Audio ────────────────────────────────────────────────
+const bgm = new Audio('/static/The_Final_Lockdown.mp3');
+bgm.loop = true;
+const cdSound = new Audio('/static/countdown.mp3'); // Pastikan file countdown.mp3 ada di folder static
+
 // Screens
 const SCR = {
   camera:    document.getElementById('screen-camera'),
@@ -302,6 +307,8 @@ function beginRound() {
 
 function endRound(winner) {
   if (S.phase !== 'playing') return;
+  cdSound.pause();
+  cdSound.currentTime = 0;
   S.roundWinner = winner;
   S.roundEnd    = performance.now();
   if (winner === 1) S.p1Score++;
@@ -342,6 +349,9 @@ function endRound(winner) {
 }
 
 function endGame() {
+  bgm.pause();
+  cdSound.pause();
+  cdSound.currentTime = 0;
   S.gameWinner = S.p1Score > S.p2Score ? 1 : S.p2Score > S.p1Score ? 2 : 0;
   S.phase = 'game_over';
 
@@ -358,6 +368,10 @@ function endGame() {
 }
 
 function resetGame() {
+  bgm.pause();
+  bgm.currentTime = 0;
+  cdSound.pause();
+  cdSound.currentTime = 0;
   S.phase      = 'waiting';
   S.p1Score    = 0; S.p2Score  = 0;
   S.round      = 0;
@@ -518,6 +532,13 @@ function renderLoop() {
     const dashOffset = RING_CIRC * (1 - remaining / CFG.roundTime);
     elRingFg.style.strokeDashoffset = dashOffset;
 
+    // Countdown Audio
+    if (remaining <= 10 && remaining > 0) {
+      if (cdSound.paused) cdSound.play().catch(e => console.warn('cdSound error:', e));
+    } else {
+      if (!cdSound.paused) { cdSound.pause(); cdSound.currentTime = 0; }
+    }
+
     // API alternating calls
     if (now - S.lastApiTime > CFG.apiIntervalMs) {
       if (S.apiTurn === 1 && !S.processingP1) {
@@ -584,6 +605,8 @@ document.getElementById('btn-start').addEventListener('click', () => {
 
   S.p1Score = 0; S.p2Score = 0;
   S.round   = 0; S.usedObjects = [];
+  bgm.currentTime = 0;
+  bgm.play().catch(e => console.warn('BGM play failed:', e));
   beginCountdown();
 });
 
