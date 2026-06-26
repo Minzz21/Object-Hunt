@@ -677,6 +677,14 @@ window.addEventListener('resize', resizeCanvas);
 document.getElementById('btn-change-cam').addEventListener('click', openCameraSelector);
 document.getElementById('btn-switch-cam').addEventListener('click', openCameraSelector);
 
+// Guide button
+document.getElementById('btn-guide').addEventListener('click', () => {
+  document.getElementById('screen-guide').classList.add('active');
+});
+document.getElementById('btn-close-guide').addEventListener('click', () => {
+  document.getElementById('screen-guide').classList.remove('active');
+});
+
 // ── Init ─────────────────────────────────────────────────
 (async () => {
   await setupCamera();

@@ -776,3 +776,192 @@ html, body {
   border-radius: 4px;
   text-transform: uppercase;
 }
+
+/* ── Waiting Actions Row ─────────────────────────────── */
+.waiting-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Guide Button (eye-catching) ─────────────────────── */
+.btn-guide {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,212,255,0.12));
+  color: var(--target);
+  border: 1.5px solid rgba(0,255,136,0.4);
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  animation: guide-glow 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+.btn-guide::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--target), var(--p2), var(--gold), var(--target));
+  background-size: 300% 300%;
+  animation: guide-border-shift 3s ease infinite;
+  z-index: -1;
+  opacity: 0.4;
+}
+.btn-guide::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 9px;
+  background: rgba(8,9,15,0.92);
+  z-index: -1;
+}
+.btn-guide:hover {
+  color: #fff;
+  border-color: var(--target);
+  background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,212,255,0.2));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,255,136,0.25);
+}
+
+@keyframes guide-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,255,136,0.15); }
+  50%      { box-shadow: 0 0 20px rgba(0,255,136,0.35), 0 0 40px rgba(0,255,136,0.1); }
+}
+@keyframes guide-border-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Guide Modal ─────────────────────────────────────── */
+.guide-card {
+  max-width: 520px;
+  padding: 32px 36px;
+  text-align: left;
+}
+.guide-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+.guide-icon {
+  font-size: 36px;
+}
+.guide-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, var(--target), var(--p2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.guide-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, background 0.2s;
+}
+.guide-step:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.15);
+}
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #ff8c42);
+  color: #08090f;
+  font-size: 15px;
+  font-weight: 900;
+}
+.step-body strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.step-body p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.step-body em {
+  color: var(--gold);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.guide-tips {
+  background: rgba(0,255,136,0.06);
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+.tips-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--target);
+  margin-bottom: 8px;
+}
+.guide-tips ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.guide-tips li {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+}
+.guide-tips li::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  color: var(--target);
+  font-size: 10px;
+}
+
+.guide-card .btn-primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+

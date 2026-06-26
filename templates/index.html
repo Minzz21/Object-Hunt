@@ -125,10 +125,13 @@
       <div class="config-info" id="config-info-display">
         <span id="cfg-rounds-display">5 Ronde</span><span class="dot-sep">•</span>
         <span id="cfg-time-display">30 Detik / Ronde</span><span class="dot-sep">•</span>
-        <span>15 Objek</span>
+        <span>10 Objek</span>
       </div>
       <button id="btn-start" class="btn-primary">MULAI GAME</button>
-      <button id="btn-change-cam" class="btn-secondary">📷 Ganti Kamera</button>
+      <div class="waiting-actions">
+        <button id="btn-change-cam" class="btn-secondary">📷 Ganti Kamera</button>
+        <button id="btn-guide" class="btn-guide">📖 Panduan Permainan</button>
+      </div>
       <p class="hint-text">Pastikan kamera sudah aktif</p>
     </div>
   </div>
@@ -177,6 +180,55 @@
       <div class="go-buttons">
         <button id="btn-replay" class="btn-primary">MAIN LAGI</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ── SCREEN: GUIDE ──────────────────────────────── -->
+  <div id="screen-guide" class="overlay" style="z-index:200">
+    <div class="overlay-card guide-card">
+      <div class="guide-header">
+        <span class="guide-icon">📖</span>
+        <h2 class="guide-title">Panduan Permainan</h2>
+      </div>
+      <div class="guide-content">
+        <div class="guide-step">
+          <span class="step-number">1</span>
+          <div class="step-body">
+            <strong>Siapkan Kamera</strong>
+            <p>Pastikan kamera menghadap area permainan. Kedua pemain berdiri di sisi kiri dan kanan layar.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="step-number">2</span>
+          <div class="step-body">
+            <strong>Objek Muncul</strong>
+            <p>Setiap ronde, nama objek akan ditampilkan. Contoh: <em>BOTTLE</em>, <em>BOOK</em>, <em>CELL PHONE</em>, dll.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="step-number">3</span>
+          <div class="step-body">
+            <strong>Cari & Tunjukkan!</strong>
+            <p>Cari objek tersebut di sekitarmu lalu tunjukkan ke kamera secepat mungkin. Pemain tercepat mendapat <strong style="color: var(--gold)">+1 poin</strong>!</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <span class="step-number">4</span>
+          <div class="step-body">
+            <strong>Menangkan Game</strong>
+            <p>Pemain dengan poin tertinggi di akhir semua ronde menjadi <strong style="color: var(--gold)">🏆 Juara</strong>!</p>
+          </div>
+        </div>
+      </div>
+      <div class="guide-tips">
+        <span class="tips-label">💡 Tips</span>
+        <ul>
+          <li>Tunjukkan objek dengan jelas ke kamera agar terdeteksi</li>
+          <li>Pastikan pencahayaan cukup terang</li>
+          <li>Semakin dekat objek ke kamera, semakin mudah terdeteksi</li>
+        </ul>
+      </div>
+      <button id="btn-close-guide" class="btn-primary">MENGERTI, AYO MAIN!</button>
     </div>
   </div>
 
