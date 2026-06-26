@@ -14,9 +14,8 @@ const CFG = {
 let playerNames = { 1: 'PLAYER 1', 2: 'PLAYER 2' };
 
 const OBJECT_POOL = [
-  'book', 'laptop', 'keyboard', 'mouse', 'scissors',
-  'backpack', 'cell phone', 'chair', 'clock', 'bottle',
-  'cup', 'remote', 'umbrella', 'tie', 'tv',
+  'book', 'laptop', 'keyboard', 'mouse', 'cell phone',
+  'bottle', 'cup', 'scissors', 'backpack', 'clock',
 ];
 
 // ── State ────────────────────────────────────────────────
