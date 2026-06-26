@@ -177,6 +177,10 @@ async function setupCamera() {
     btnConfirm.disabled = true;
     btnConfirm.textContent = 'Menghubungkan...';
 
+    // Play main menu sound immediately (before async) to satisfy browser autoplay policy
+    mainMenuSound.currentTime = 0;
+    mainMenuSound.play().catch(e => console.warn('mainMenuSound error:', e));
+
     // Stop preview stream
     if (previewStream) { previewStream.getTracks().forEach(t => t.stop()); previewStream = null; }
 
@@ -196,10 +200,9 @@ async function setupCamera() {
       SCR.waiting.classList.add('active');
       btnConfirm.disabled = false;
       btnConfirm.textContent = '✅ Gunakan Kamera Ini';
-      
-      mainMenuSound.currentTime = 0;
-      mainMenuSound.play().catch(e => console.warn('mainMenuSound error:', e));
     } catch (e) {
+      mainMenuSound.pause();
+      mainMenuSound.currentTime = 0;
       btnConfirm.disabled = false;
       btnConfirm.textContent = '✅ Gunakan Kamera Ini';
       document.getElementById('cam-error').style.whiteSpace = 'pre-line';
