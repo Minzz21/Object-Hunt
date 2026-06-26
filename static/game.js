@@ -69,7 +69,7 @@ const cdSound = new Audio('/static/countdown.mp3'); // Pastikan file countdown.m
 const correctSound = new Audio('/static/correct.mp3');
 const failedSound = new Audio('/static/failed.mp3');
 const finishSound = new Audio('/static/finish.mp3');
-const mainMenuSound = new Audio('/static/main menu.mp3');
+const mainMenuSound = new Audio('/static/main_menu.mp3');
 mainMenuSound.loop = true;
 
 // Screens
