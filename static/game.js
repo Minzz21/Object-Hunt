@@ -67,6 +67,11 @@ const RING_CIRC   = 2 * Math.PI * 19; // circumference of timer ring
 const bgm = new Audio('/static/The_Final_Lockdown.mp3');
 bgm.loop = true;
 const cdSound = new Audio('/static/countdown.mp3'); // Pastikan file countdown.mp3 ada di folder static
+const correctSound = new Audio('/static/correct.mp3');
+const failedSound = new Audio('/static/failed.mp3');
+const finishSound = new Audio('/static/finish.mp3');
+const mainMenuSound = new Audio('/static/main menu.mp3');
+mainMenuSound.loop = true;
 
 // Screens
 const SCR = {
@@ -192,6 +197,9 @@ async function setupCamera() {
       SCR.waiting.classList.add('active');
       btnConfirm.disabled = false;
       btnConfirm.textContent = '✅ Gunakan Kamera Ini';
+      
+      mainMenuSound.currentTime = 0;
+      mainMenuSound.play().catch(e => console.warn('mainMenuSound error:', e));
     } catch (e) {
       btnConfirm.disabled = false;
       btnConfirm.textContent = '✅ Gunakan Kamera Ini';
@@ -290,6 +298,10 @@ function beginCountdown() {
 
   document.getElementById('cd-target').textContent = S.target.toUpperCase();
   document.getElementById('cd-number').textContent = CFG.countdownSecs;
+  
+  cdSound.currentTime = 0;
+  cdSound.play().catch(e => console.warn('cdSound error:', e));
+
   showScreen('countdown');
 }
 
@@ -311,6 +323,15 @@ function endRound(winner) {
   cdSound.currentTime = 0;
   S.roundWinner = winner;
   S.roundEnd    = performance.now();
+  
+  if (winner === 1 || winner === 2) {
+    correctSound.currentTime = 0;
+    correctSound.play().catch(e => console.warn('correctSound error:', e));
+  } else if (winner === 0) {
+    failedSound.currentTime = 0;
+    failedSound.play().catch(e => console.warn('failedSound error:', e));
+  }
+
   if (winner === 1) S.p1Score++;
   else if (winner === 2) S.p2Score++;
   S.phase = 'round_end';
@@ -352,6 +373,10 @@ function endGame() {
   bgm.pause();
   cdSound.pause();
   cdSound.currentTime = 0;
+  
+  finishSound.currentTime = 0;
+  finishSound.play().catch(e => console.warn('finishSound error:', e));
+
   S.gameWinner = S.p1Score > S.p2Score ? 1 : S.p2Score > S.p1Score ? 2 : 0;
   S.phase = 'game_over';
 
@@ -372,6 +397,12 @@ function resetGame() {
   bgm.currentTime = 0;
   cdSound.pause();
   cdSound.currentTime = 0;
+  finishSound.pause();
+  finishSound.currentTime = 0;
+  
+  mainMenuSound.currentTime = 0;
+  mainMenuSound.play().catch(e => console.warn('mainMenuSound error:', e));
+
   S.phase      = 'waiting';
   S.p1Score    = 0; S.p2Score  = 0;
   S.round      = 0;
@@ -587,6 +618,8 @@ function renderLoop() {
 
 // ── Event Listeners ──────────────────────────────────────
 document.getElementById('btn-start').addEventListener('click', () => {
+  mainMenuSound.pause();
+  mainMenuSound.currentTime = 0;
   // Read player names
   const n1 = document.getElementById('input-p1-name').value.trim();
   const n2 = document.getElementById('input-p2-name').value.trim();
